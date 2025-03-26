@@ -7,6 +7,7 @@ This repository provides a working example of a Next.js 15 Pages Router implemen
 ## Key Considerations
 
 ⚠️ **Important Limitations**
+
 The proxy server approach used in [chat-boilerplate](https://github.com/BitteProtocol/chat-boilerplate/blob/main/src/app/api/chat/route.ts) won't work with Pages Router due to:
 - Lack of native `ReadableStream` support in Pages Router APIs
 - Fundamental architectural differences between routing systems
@@ -19,4 +20,5 @@ The proxy server approach used in [chat-boilerplate](https://github.com/BittePro
 - Traditional API routing patterns
 
 ⚠️ **Official Recommendation**
+
 The Vercel team explicitly [recommends using App Router](https://nextjs.org/docs/pages) for new projects. We strongly suggest using the [chat-boilerplate](https://github.com/BitteProtocol/chat-boilerplate) with App Router support instead of this implementation unless you have specific legacy requirements.
