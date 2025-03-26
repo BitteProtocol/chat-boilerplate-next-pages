@@ -20,12 +20,8 @@ const Chat = () => {
 
   useEffect(() => {
     if (!selector) {
-      console.log("Selector is not available yet.");
       return;
     }
-
-    console.log("isWalletSelectorSetup:", isWalletSelectorSetup);
-    console.log("isConnected:", isConnected);
 
     const fetchWallet = async () => {
       try {
@@ -38,11 +34,9 @@ const Chat = () => {
 
         const walletInstance = await selector.wallet();
         if (!walletInstance) {
-          console.warn("Wallet instance is undefined.");
           return;
         }
 
-        console.log("Wallet instance:", walletInstance);
         setWallet(walletInstance);
       } catch (error) {
         console.error("Error fetching wallet:", error);
@@ -51,8 +45,6 @@ const Chat = () => {
 
     fetchWallet();
   }, [selector, isConnected, isWalletSelectorSetup]);
-
-  // if (!wallet) return <p>Please Connect Wallet.</p>;
 
   const chatOptions = {
     agentImage: bitteAgent.image,
