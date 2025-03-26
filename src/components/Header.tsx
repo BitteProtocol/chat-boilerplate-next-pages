@@ -15,14 +15,14 @@ const Header: React.FC = () => {
         alt="Bitte logo"
         width={112}
         height={22}
-        className="hidden md:block"
+        className="invisible md:visible"
       />
       <Image
         src="/bitte-symbol.svg"
         alt="Bitte Symbol"
         width={32}
         height={32}
-        className="md:hidden"
+        className="md:invisible"
       />
       <div className="flex gap-4 items-center">
         <NearWalletConnector />

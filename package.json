@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@bitte-ai/chat": "0.1.0-remove-css-import-beta-da1a405",
+    "@bitte-ai/chat": "0.1.0-remove-css-import-beta-909947c",
     "@bitte-ai/react": "0.7.1-update-packages-3633f88",
     "@near-wallet-selector/modal-ui": "^8.10.0",
     "@radix-ui/react-dropdown-menu": "^2.1.6",
