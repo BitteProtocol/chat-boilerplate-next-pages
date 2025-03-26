@@ -17,7 +17,6 @@ The proxy server approach used in [chat-boilerplate](https://github.com/BittePro
 
 ✅ **Compatible With**
 - Your own external API endpoints (for custom agent implementations)
-- Traditional API routing patterns
 
 ⚠️ **Official Recommendation**
 
