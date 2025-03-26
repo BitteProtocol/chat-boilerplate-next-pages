@@ -3,9 +3,7 @@
 import { BitteWalletContextProvider } from "@bitte-ai/react";
 
 const BitteWalletSetup = {
-  network: "mainnet",
   callbackUrl: typeof window !== "undefined" ? window.location.origin : "",
-  contractAddress: "",
 };
 
 type WalletProviderProps = {
