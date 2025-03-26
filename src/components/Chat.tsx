@@ -64,7 +64,7 @@ const Chat = () => {
       options={chatOptions}
       agentId={bitteAgent.id}
       wallet={{ near: { wallet } }}
-      apiUrl="/api/chat"
+      apiUrl="https://chat.bitte.ai/api/chat"
     />
   );
 };
