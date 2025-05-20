@@ -23,22 +23,17 @@ export default async function handler(
       body: JSON.stringify(req.body),
     });
 
-    // Copy status code
     res.statusCode = upstreamResponse.status;
 
-    // Copy content type
     res.setHeader('Content-Type',
       upstreamResponse.headers.get('Content-Type') || 'application/json');
 
-    // If there's no body, end the response
     if (!upstreamResponse.body) {
       return res.end();
     }
 
-    // Stream the response
     const reader = upstreamResponse.body.getReader();
 
-    // Process one chunk at a time
     while (true) {
       const { done, value } = await reader.read();
       if (done) break;
