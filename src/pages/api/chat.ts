@@ -42,6 +42,7 @@ export default async function handler(
 
     res.end();
   } catch (error) {
+    console.error('Error in chat API route:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 }
