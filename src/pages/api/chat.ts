@@ -9,7 +9,6 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  // Only allow POST requests
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -26,32 +25,24 @@ export default async function handler(
       },
     };
 
-    // Make the upstream request
     const upstreamResponse = await fetch(`${BITTE_API_URL}`, requestInit);
     
-    // Set status code from upstream
     res.statusCode = upstreamResponse.status;
     
-    // Copy relevant headers from upstream response
     for (const [key, value] of Object.entries(upstreamResponse.headers)) {
-      // Skip content-encoding as it might cause issues
       if (key.toLowerCase() !== 'content-encoding') {
         res.setHeader(key, value as string);
       }
     }
 
-    // Ensure we're sending the proper content type
     res.setHeader('Content-Type', upstreamResponse.headers.get('Content-Type') || 'application/json');
     
-    // Handle streaming response
     if (!upstreamResponse.body) {
       return res.end();
     }
 
-    // Stream the response body
     const reader = upstreamResponse.body.getReader();
     
-    // This function will be called recursively to read chunks
     async function readChunk() {
       const { done, value } = await reader.read();
       
@@ -59,7 +50,6 @@ export default async function handler(
         return res.end();
       }
       
-      // Write chunk to response and continue
       res.write(value);
       await readChunk();
     }
