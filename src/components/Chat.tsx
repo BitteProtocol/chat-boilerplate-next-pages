@@ -48,7 +48,7 @@ const Chat = () => {
 
   const chatOptions = {
     agentImage: bitteAgent.image,
-    agentName: bitteAgent.name,
+    agentName: 'Rhea',
     customComponents: { welcomeMessageComponent: <WelcomeMessage /> },
     colors: {
       generalBackground: "#18181A",
@@ -62,9 +62,10 @@ const Chat = () => {
   return (
     <BitteAiChat
       options={chatOptions}
-      agentId={bitteAgent.id}
+      agentId="rhea-finance-ai.vercel.app"
       wallet={{ near: { wallet } }}
-      apiUrl="your own api"
+      apiUrl="/api/chat"
+      historyApiUrl="/api/history"
     />
   );
 };

@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@bitte-ai/chat": "0.2.1",
+    "@bitte-ai/chat": "0.6.6",
     "@bitte-ai/react": "0.8.0",
     "@near-wallet-selector/modal-ui": "^8.10.0",
     "@radix-ui/react-dropdown-menu": "^2.1.6",
