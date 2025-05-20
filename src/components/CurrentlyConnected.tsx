@@ -2,6 +2,7 @@ import { Unlink } from 'lucide-react';
 import Image from 'next/image';
 import { Button } from './ui/button';
 import { CopyStandard } from './ui/copy/Copy';
+import type { JSX } from 'react';
 
 const CurrentlyConnected = ({
   chainIcon,
@@ -45,9 +46,7 @@ const CurrentlyConnected = ({
         </div>
       </div>
       <Button
-        variant="outline"
-        className="px-2.5 border border-mb-red-30 bg-transparent"
-        size="sm"
+        className="px-2.5 border border-mb-red-30 bg-transparent shadow-sm hover:bg-accent hover:text-accent-foreground h-8 rounded-md text-xs"
         onClick={action}
         aria-label="Disconnect"
       >

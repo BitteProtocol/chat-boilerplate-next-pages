@@ -12,7 +12,7 @@ import {
   polygon,
   sepolia,
 } from '@reown/appkit/networks';
-import { createAppKit } from '@reown/appkit/react';
+import { createAppKit } from '@reown/appkit/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { WagmiProvider, type cookieToInitialState } from 'wagmi';
 import { cookieStorage, createStorage } from 'wagmi';
@@ -32,7 +32,6 @@ const networks = [
   optimism,
   avalanche,
   gnosis,
-  mode,
   sepolia,
 ];
 
@@ -56,7 +55,7 @@ export const wagmiAdapter = new WagmiAdapter({
   networks,
 });
 
-const appKit = createAppKit({
+createAppKit({
   adapters: [wagmiAdapter],
   projectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID as string,
   networks: [

@@ -13,7 +13,6 @@ import {
   DrawerTrigger,
 } from '@/components/ui/drawer';
 import { useAppKit } from '@reown/appkit/react';
-import { Link2 } from 'lucide-react';
 import type React from 'react';
 import type { Dispatch, SetStateAction } from 'react';
 
@@ -28,16 +27,12 @@ interface ConnectDialogProps {
   isOpen: boolean;
   setConnectModalOpen: Dispatch<SetStateAction<boolean>>;
   isWelcomeMessage?: boolean;
-  isSidebar?: boolean;
-  sidebarOpen?: boolean;
 }
 
 const ConnectDialog: React.FC<ConnectDialogProps> = ({
   isOpen,
   setConnectModalOpen,
   isWelcomeMessage,
-  isSidebar,
-  sidebarOpen,
 }) => {
   const { width } = useWindowSize();
   const isMobile = !!width && width < 1024;
@@ -94,19 +89,9 @@ const ConnectDialog: React.FC<ConnectDialogProps> = ({
   return (
     <Dialog open={isOpen} onOpenChange={setConnectModalOpen}>
       <DialogTrigger asChild>
-        {sidebarOpen ? (
-          <Button className="w-full" aria-label="Connect wallet">
-            Connect Wallet
-          </Button>
-        ) : isSidebar ? (
-          <Button size="icon">
-            <Link2 size={16} />
-          </Button>
-        ) : (
-          <Button className="w-[137px]" aria-label="Connect wallet">
+      <Button className="w-[137px]" aria-label="Connect wallet">
             Connect
           </Button>
-        )}
       </DialogTrigger>
       <DialogContent className="max-w-[510px] min-h-[415px] border border-mb-gray-800 bg-black rounded-md p-8">
         <div className="mb-7">
