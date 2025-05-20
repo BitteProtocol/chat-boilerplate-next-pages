@@ -1,10 +1,8 @@
-"use client";
+'use client';
 
-import { BitteWalletContextProvider } from "@bitte-ai/react";
-
-const BitteWalletSetup = {
-  callbackUrl: typeof window !== "undefined" ? window.location.origin : "",
-};
+import { BitteWalletContextProvider } from '@bitte-ai/react';
+import { WalletProvider as SuietWalletProvider } from '@suiet/wallet-kit';
+import '@suiet/wallet-kit/style.css';
 
 type WalletProviderProps = {
   children: React.ReactNode;
@@ -12,8 +10,8 @@ type WalletProviderProps = {
 
 const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
   return (
-    <BitteWalletContextProvider {...BitteWalletSetup}>
-      {children}
+    <BitteWalletContextProvider>
+      <SuietWalletProvider autoConnect={false}>{children}</SuietWalletProvider>
     </BitteWalletContextProvider>
   );
 };

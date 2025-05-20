@@ -6,7 +6,7 @@ export default function Document() {
       <Head>
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@bitte-ai/chat/dist/style.css" />
       </Head>
-      <body className="antialiased">
+      <body className="antialiased antialiased dark min-h-[calc(100vh-64px)] bg-[#18181A]">
         <Main />
         <NextScript />
       </body>
