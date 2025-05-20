@@ -1,79 +1,80 @@
-"use client";
+'use client';
 
-import { useBitteWallet } from "@bitte-ai/react";
-import { LogOut, SettingsIcon } from "lucide-react";
-import { useState } from "react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "./DropdownMenu";
+import { useBitteWallet } from '@bitte-ai/react';
+import { getBalance } from '@mintbase-js/rpc';
+import { utils } from 'near-api-js';
+import Image from 'next/image';
+import type { Dispatch, SetStateAction } from 'react';
+import { useEffect, useState } from 'react';
+import ConnectAccountCard from './ConnectAccountCard';
+import CurrentlyConnected from './CurrentlyConnected';
 
-const NearWalletConnector: React.FC = () => {
-  const [isOpen, setIsOpen] = useState(false);
-
+export const NearWalletConnector = ({
+  setConnectModalOpen,
+}: {
+  setConnectModalOpen: Dispatch<SetStateAction<boolean>>;
+}) => {
   const { isConnected, selector, connect, activeAccountId } = useBitteWallet();
 
-  const handleSignOut = async () => {
+  const [balance, setBalance] = useState<string>('0');
+
+  const handleSignout = async () => {
     const wallet = await selector.wallet();
-    await wallet.signOut();
-    window.location.reload();
+    return wallet.signOut();
   };
 
   const handleSignIn = async () => {
     try {
       await connect();
     } catch (error) {
-      console.error("Failed to connect wallet:", error);
+      console.error('Failed to connect wallet:', error);
     }
   };
 
-  const triggerElement = (
-    <button
-      className="bg-[#27272A] text-[#FAFAFA] h-[40px] w-[40px] flex items-center justify-center hover:bg-opacity-80 rounded-md font-medium"
-      onClick={() => setIsOpen(!isOpen)}
-    >
-      <SettingsIcon size={20} />
-    </button>
-  );
+  useEffect(() => {
+    const fetchBalance = async () => {
+      if (activeAccountId) {
+        const balance = await getBalance({
+          accountId: activeAccountId,
+          rpcUrl: 'https://rpc.mainnet.near.org',
+        });
+        setBalance(balance.toString());
+      }
+    };
+    fetchBalance();
+  }, [activeAccountId]);
 
   if (!isConnected) {
     return (
-      <div className="fixed bottom-0 md:relative bg-black p-8 z-30 w-full left-0 md:p-0 md:w-auto md:bg-transparent">
-        <button
-          className="bg-[#FAFAFA] h-[40px] px-8 py-2 hover:bg-opacity-80 text-[#18181B] rounded-md font-medium w-full md:w-auto"
-          onClick={handleSignIn}
-        >
-          Connect Wallet
-        </button>
-      </div>
+      <ConnectAccountCard
+        action={[handleSignIn, () => setConnectModalOpen(false)]}
+        icon={{ src: '/near_connect_icon.svg' }}
+        text="NEAR Account"
+        account="blackdragon.near"
+      />
     );
   }
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>{triggerElement}</DropdownMenuTrigger>
-      <DropdownMenuContent
-        className="w-full rounded-lg md:mr-28 md:w-[364px] bg-black"
-        sideOffset={12}
-      >
-        <DropdownMenuLabel>Currently Connected</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>{activeAccountId}</DropdownMenuItem>
-
-        <DropdownMenuSeparator />
-        <DropdownMenuItem asChild className="cursor-pointer">
-          <button className="flex items-center gap-2" onClick={handleSignOut}>
-            <LogOut size={16} />
-            <span className="text-sm">Disconnect</span>
-          </button>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <CurrentlyConnected
+      chainIcon="/near_connect_icon.svg"
+      accountId={activeAccountId || ''}
+      networkBadge={
+        <div className="bg-mb-gray-600 rounded-full py-0.5 px-3 flex items-center gap-2">
+          <div className="bg-black p-0.5 rounded">
+            <Image
+              src="/chains/near_wallet_connector_v2.svg"
+              width={14}
+              height={14}
+              alt="connect-wallet-modal-logo-near"
+            />
+          </div>
+          <span className="text-xs text-mb-white-100 font-normal">NEAR</span>
+        </div>
+      }
+      network="NEAR"
+      balance={utils.format.formatNearAmount(balance, 2)}
+      action={handleSignout}
+    />
   );
 };
-
-export default NearWalletConnector;

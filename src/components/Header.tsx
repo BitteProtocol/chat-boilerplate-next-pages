@@ -1,45 +1,68 @@
-"use client";
+'use client';
 
-import { useBitteWallet } from "@bitte-ai/react";
-import Image from "next/image";
-import React from "react";
-import NearWalletConnector from "./NearWalletConnector";
+import ConnectDialog from '@/components/ConnectDialog';
+import ManageAccountsDialog from '@/components/ManageAccountsDialog';
+import { Button } from '@/components/ui/button';
+import { MB_URL } from '@/lib/url';
+import { useBitteWallet } from '@bitte-ai/react';
+import { useWallet as useSuiWallet } from '@suiet/wallet-kit';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useState } from 'react';
+import { useAccount } from 'wagmi';
 
 const Header: React.FC = () => {
-  const { isConnected } = useBitteWallet();
+  const [isConnectModalOpen, setConnectModalOpen] = useState<boolean>(false);
+  const { isConnected: isNearConnected, connect } = useBitteWallet();
+  const { isConnected } = useAccount();
+  const { connected: isSuiConnected } = useSuiWallet();
+
+  const handleSignIn = async () => {
+    try {
+      await connect();
+    } catch (error) {
+      console.error('Failed to connect wallet:', error);
+    }
+  };
 
   return (
-    <header className="flex items-center justify-between gap-4 border-b border-[#334155] px-6 py-4 md:px-16 md:py-6">
-      <Image
-        src="/bitte-logo.svg"
-        alt="Bitte logo"
-        width={112}
-        height={22}
-        className="invisible md:visible"
-      />
-      <Image
-        src="/bitte-symbol.svg"
-        alt="Bitte Symbol"
-        width={32}
-        height={32}
-        className="md:invisible"
-      />
-      <div className="flex gap-4 items-center">
-        <NearWalletConnector />
-
-        <div
-          className={`h-[36px] w-px bg-[#334155] mx-2 hidden md:block ${
-            isConnected ? "hidden" : ""
-          }`}
-        />
-        <a
-          href="mailto:paul@bitte.ai"
-          className="bg-[#27272A] text-[#FAFAFA] px-8 py-2 hover:bg-opacity-80 rounded-md font-medium h-[40px]"
-        >
-          Contact
-        </a>
+    <>
+       <div className="absolute top-5 left-5">
+        <Image src="/bitte.svg" alt="Bitte Logo" width={35} height={35} />
       </div>
-    </header>
+    <header className="sticky top-5 right-0 w-[200px] ml-auto mr-5 z-[999] flex gap-2 justify-end items-center">
+
+      <Button
+        className="bg-[#27272A] text-[#FAFAFA] hover:bg-[#27272A] hover:bg-opacity-80"
+        asChild
+      >
+        <a href="mailto:paul@bitte.ai">Contact</a>
+      </Button>
+
+      {isNearConnected && (
+        <Link href={MB_URL.BITTE_WALLET_SETTINGS} target="_blank">
+          <Button className="border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground" aria-label="Settings">
+            Settings
+          </Button>
+        </Link>
+      )}
+      {!isConnected && !isNearConnected && !isSuiConnected && (
+        <ConnectDialog
+          isOpen={isConnectModalOpen}
+          setConnectModalOpen={setConnectModalOpen}
+        />
+      )}
+      {(isConnected || isNearConnected || isSuiConnected) && (
+        <ManageAccountsDialog
+          isOpen={isConnectModalOpen}
+          setConnectModalOpen={setConnectModalOpen}
+          isConnected={isConnected}
+          isNearConnected={isNearConnected}
+          handleSignIn={handleSignIn}
+          isSuiConnected={isSuiConnected}
+        />
+      )}
+    </header></>
   );
 };
 
