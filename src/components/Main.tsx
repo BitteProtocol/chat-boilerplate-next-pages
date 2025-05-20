@@ -87,7 +87,7 @@ const Main: React.FC = () => {
     },
     agentId: searchParams.get('agentId') || bitteAgent?.id || 'bitte-assistant',
     apiUrl: '/api/chat',
-    historyApiUrl: 'api/history',
+    historyApiUrl: '/api/history',
   };
 
   if (!isClient) {
