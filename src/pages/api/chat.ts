@@ -14,50 +14,39 @@ export default async function handler(
   }
 
   try {
-    const data = req.body;
-
-    const requestInit: RequestInit = {
+    const upstreamResponse = await fetch(BITTE_API_URL, {
       method: 'POST',
-      body: JSON.stringify(data),
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${BITTE_API_KEY}`,
       },
-    };
+      body: JSON.stringify(req.body),
+    });
 
-    const upstreamResponse = await fetch(`${BITTE_API_URL}`, requestInit);
-    
+    // Copy status code
     res.statusCode = upstreamResponse.status;
-    
-    for (const [key, value] of Object.entries(upstreamResponse.headers)) {
-      if (key.toLowerCase() !== 'content-encoding') {
-        res.setHeader(key, value as string);
-      }
-    }
 
-    res.setHeader('Content-Type', upstreamResponse.headers.get('Content-Type') || 'application/json');
-    
+    // Copy content type
+    res.setHeader('Content-Type',
+      upstreamResponse.headers.get('Content-Type') || 'application/json');
+
+    // If there's no body, end the response
     if (!upstreamResponse.body) {
       return res.end();
     }
 
+    // Stream the response
     const reader = upstreamResponse.body.getReader();
-    
-    async function readChunk() {
+
+    // Process one chunk at a time
+    while (true) {
       const { done, value } = await reader.read();
-      
-      if (done) {
-        return res.end();
-      }
-      
+      if (done) break;
       res.write(value);
-      await readChunk();
     }
-    
-    await readChunk();
-    
+
+    res.end();
   } catch (error) {
-    console.error('Error in chat API route:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
-} 
+}
