@@ -41,7 +41,7 @@ const Header: React.FC = () => {
 
       {isNearConnected && (
         <Link href={MB_URL.BITTE_WALLET_SETTINGS} target="_blank">
-          <Button className="border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground" aria-label="Settings">
+          <Button className="border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground text-white" aria-label="Settings">
             Settings
           </Button>
         </Link>
